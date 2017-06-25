@@ -8,7 +8,7 @@
 # License: MIT
 # Copyright (c) 2017 Sebastian Raff <hq@ccu.io>
 
-VERSION="2.0.0"
+VERSION="2.0.1"
 
 MM_PATH=$1
 TARBALL_URL=$2
@@ -51,9 +51,9 @@ mkdir ${NEW_TMP_PATH} 2> /dev/null
 
 echo "   Downloading $TARBALL_URL"
 cd ${NEW_TMP_PATH}
-wget -q ${TARBALL_URL} || { echo >&2 "Aborting."; exit 1; }
+wget -q ${TARBALL_URL} || { echo >&2 "Error: Download failed.  Aborting."; exit 1; }
 echo "   Extracting $TARBALL_FILE"
-tar -xzf ${TARBALL_FILE} || { echo >&2 "Aborting."; exit 1; }
+tar -xzf ${TARBALL_FILE} || { echo >&2 "Error: Extraction failed.  Aborting."; exit 1; }
 cd ${SWD}
 
 echo "   Stopping Mattermost"
@@ -71,7 +71,7 @@ then
 
     echo "   Dumping $DRIVER_NAME Database $DB_NAME to $DB_DUMP_FILE"
     cd ${MM_PATH}
-    sudo -u ${MM_USER} pg_dump ${DB_NAME} | gzip > ${DB_DUMP_FILE} || { echo >&2 "Aborting."; exit 1; }
+    sudo -u ${MM_USER} pg_dump ${DB_NAME} | gzip > ${DB_DUMP_FILE} || { echo >&2 "Error: Database dump failed.  Aborting."; exit 1; }
 
 else
     # TODO - Implement MySql Backup
@@ -80,11 +80,11 @@ else
 fi
 
 echo "   Backing up config.json to $BACKUP_TMP_PATH/config.json"
-cp ${MM_PATH}/config/config.json ${BACKUP_TMP_PATH}/ || { echo >&2 "Aborting."; exit 1; }
+cp ${MM_PATH}/config/config.json ${BACKUP_TMP_PATH}/
 
 echo "   Backing up ${MM_PATH}/$DATA_DIR to $BACKUP_TMP_PATH/data.tar.gz"
 cd ${MM_PATH}
-tar -czf ${BACKUP_TMP_PATH}/data.tar.gz ${DATA_DIR} || { echo >&2 "Aborting."; exit 1; }
+tar -czf ${BACKUP_TMP_PATH}/data.tar.gz ${DATA_DIR}
 cd ${SWD}
 
 echo "   Copying $NEW_BUILD_NUMBER to $MM_PATH"
