@@ -13,8 +13,7 @@ wget https://raw.githubusercontent.com/hobbyquaker/mattermost-update/master/mmup
 chmod a+x mmupdate.sh
 ```
 
-In the first few lines of the script you possibly have to change the variables `MM_PATH`, `MM_USER` and `MM_GROUP` 
-(defaults are `/opt/mattermost`, `mattermost` and `mattermost`).
+In the first few lines of the script you possibly have to change the variable `MM_PATH` (default is `/opt/mattermost).
 
 This script utilizes [jq](https://stedolan.github.io/jq/), wget and sudo, so these need to be installed as prerequisite.
 
@@ -36,7 +35,7 @@ mmupdate.sh https://releases.mattermost.com/3.10.0/mattermost-3.10.0-linux-amd64
 * Nicer console output (e.g. colored unicode checkmarks)?
 * Fully automated update: another script that checks the Mattermost webpage for updates and calls mmupdate.sh
 * Get data folder path from config.json
-* Supply MM_PATH as command line argument and automatically find user/group name
+* Supply MM_PATH as command line argument
 
 ## Contributing
 

@@ -11,8 +11,9 @@
 VERSION="1.0.0"
 
 MM_PATH=/opt/mattermost
-MM_USER=mattermost
-MM_GROUP=mattermost
+
+MM_USER=`ls -ld ${MM_PATH} | awk '{print $3}'`
+MM_GROUP=`ls -ld ${MM_PATH} | awk '{print $4}'`
 
 command -v jq >/dev/null 2>&1 || { echo >&2 "This script requires jq but it's not installed.  Aborting."; exit 1; }
 command -v wget >/dev/null 2>&1 || { echo >&2 "This script requires wget but it's not installed.  Aborting."; exit 1; }
