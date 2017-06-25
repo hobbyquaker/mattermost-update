@@ -19,12 +19,12 @@ This script utilizes [jq](https://stedolan.github.io/jq/), wget and sudo, so the
 
 ## Usage
 
-Get the URL of the latest Mattermost tarball from http://about.mattermost.com/download/ and call mmupdate.sh with this
-url as parameter.
+Copy the URL of the latest Mattermost tarball from http://about.mattermost.com/download/ and call mmupdate.sh with the
+path of you Mattermost installation and the tarball url as parameters.
 
 Example:
 ```bash
-mmupdate.sh https://releases.mattermost.com/3.10.0/mattermost-3.10.0-linux-amd64.tar.gz
+mmupdate.sh /opt/mattermost https://releases.mattermost.com/3.10.0/mattermost-3.10.0-linux-amd64.tar.gz
 ```
 
 
@@ -35,7 +35,6 @@ mmupdate.sh https://releases.mattermost.com/3.10.0/mattermost-3.10.0-linux-amd64
 * Nicer console output (e.g. colored unicode checkmarks)?
 * Fully automated update: another script that checks the Mattermost webpage for updates and calls mmupdate.sh
 * Get data folder path from config.json
-* Supply MM_PATH as command line argument
 
 ## Contributing
 

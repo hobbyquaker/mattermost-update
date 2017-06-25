@@ -10,10 +10,8 @@
 
 VERSION="1.0.0"
 
-MM_PATH=/opt/mattermost
-
-MM_USER=`ls -ld ${MM_PATH} | awk '{print $3}'`
-MM_GROUP=`ls -ld ${MM_PATH} | awk '{print $4}'`
+MM_PATH=$1
+TARBALL_URL=$2
 
 command -v jq >/dev/null 2>&1 || { echo >&2 "This script requires jq but it's not installed.  Aborting."; exit 1; }
 command -v wget >/dev/null 2>&1 || { echo >&2 "This script requires wget but it's not installed.  Aborting."; exit 1; }
@@ -21,7 +19,16 @@ command -v sudo >/dev/null 2>&1 || { echo >&2 "This script requires sudo but it'
 
 SWD=`pwd`
 
-TARBALL_FILE=`echo $1 | sed -r 's#.*\/(.*)$#\1#'`
+MM_CONFIG=${MM_PATH}/config/config.json
+if [ ! -f ${MM_CONFIG} ]; then
+    echo "Error: $MM_CONFIG not found.  Aborting."
+    exit 1
+fi
+
+MM_USER=`ls -ld ${MM_PATH} | awk '{print $3}'`
+MM_GROUP=`ls -ld ${MM_PATH} | awk '{print $4}'`
+
+TARBALL_FILE=`echo ${TARBALL_URL} | sed -r 's#.*\/(.*)$#\1#'`
 NEW_BUILD_NUMBER=`echo ${TARBALL_FILE} | sed -r 's/^mattermost-([0-9.]+).*/\1/'`
 
 cd ${MM_PATH}
@@ -36,12 +43,12 @@ fi
 BACKUP_TMP_PATH=/tmp/mattermost.backup.${MM_BUILD_NUMBER}
 NEW_TMP_PATH=/tmp/mattermost.update.${NEW_BUILD_NUMBER}
 mkdir ${BACKUP_TMP_PATH} 2> /dev/null
-${NEW_TMP_PATH} 2> /dev/null
+rm -r ${NEW_TMP_PATH} 2> /dev/null
 mkdir ${NEW_TMP_PATH} 2> /dev/null
 
-echo "   Downloading $1"
+echo "   Downloading $TARBALL_URL"
 cd ${NEW_TMP_PATH}
-wget -q $1 || { echo >&2 "Aborting."; exit 1; }
+wget -q ${TARBALL_URL} || { echo >&2 "Aborting."; exit 1; }
 echo "   Extracting $TARBALL_FILE"
 tar -xzf ${TARBALL_FILE} || { echo >&2 "Aborting."; exit 1; }
 cd ${SWD}
@@ -50,7 +57,7 @@ echo "   Stopping Mattermost"
 service mattermost stop || { echo >&2 "Aborting."; exit 1; }
 BACKUP_FINAL_PATH=${MM_PATH}/backup/`date +%Y%m%d%H%M`_${MM_BUILD_NUMBER}
 
-SQL_SETTINGS=`cat ${MM_PATH}/config/config.json | jq '.SqlSettings'`
+SQL_SETTINGS=`cat ${MM_CONFIG} | jq '.SqlSettings'`
 DRIVER_NAME=`echo ${SQL_SETTINGS} | jq -r '.DriverName'`
 
 if [ ${DRIVER_NAME} == "postgres" ]
