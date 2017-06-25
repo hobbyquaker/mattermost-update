@@ -40,7 +40,7 @@ MM_BUILD_NUMBER=`sudo -u ${MM_USER} ${MM_PATH}/bin/platform version | sed -nr 's
 if [ "$NEW_BUILD_NUMBER" == "$MM_BUILD_NUMBER" ]
 then
     echo >&2 "Build $MM_BUILD_NUMBER is already installed. Aborting."
-    #exit 1
+    exit 1
 fi
 
 BACKUP_TMP_PATH=/tmp/mattermost.backup.${MM_BUILD_NUMBER}
