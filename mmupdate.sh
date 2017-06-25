@@ -8,7 +8,7 @@
 # License: MIT
 # Copyright (c) 2017 Sebastian Raff <hq@ccu.io>
 
-VERSION="1.0.0"
+VERSION="2.0.0"
 
 MM_PATH=$1
 TARBALL_URL=$2
