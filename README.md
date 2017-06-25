@@ -34,7 +34,6 @@ mmupdate.sh /opt/mattermost https://releases.mattermost.com/3.10.0/mattermost-3.
 * More testing
 * Nicer console output (e.g. colored unicode checkmarks)?
 * Fully automated update: another script that checks the Mattermost webpage for updates and calls mmupdate.sh
-* Get data folder path from config.json
 
 ## Contributing
 

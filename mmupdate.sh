@@ -19,11 +19,14 @@ command -v sudo >/dev/null 2>&1 || { echo >&2 "This script requires sudo but it'
 
 SWD=`pwd`
 
-MM_CONFIG=${MM_PATH}/config/config.json
-if [ ! -f ${MM_CONFIG} ]; then
-    echo "Error: $MM_CONFIG not found.  Aborting."
+MM_CONFIG_FILE=${MM_PATH}/config/config.json
+if [ ! -f ${MM_CONFIG_FILE} ]; then
+    echo "Error: $MM_CONFIG_FILE not found.  Aborting."
     exit 1
 fi
+
+MM_CONFIG=`cat ${MM_CONFIG_FILE}`
+DATA_DIR=`echo ${MM_CONFIG} | jq -r '.FileSettings.Directory' | sed -nr 's/^\.\/(.*)/\1/p'`
 
 MM_USER=`ls -ld ${MM_PATH} | awk '{print $3}'`
 MM_GROUP=`ls -ld ${MM_PATH} | awk '{print $4}'`
@@ -57,7 +60,7 @@ echo "   Stopping Mattermost"
 service mattermost stop || { echo >&2 "Aborting."; exit 1; }
 BACKUP_FINAL_PATH=${MM_PATH}/backup/`date +%Y%m%d%H%M`_${MM_BUILD_NUMBER}
 
-SQL_SETTINGS=`cat ${MM_CONFIG} | jq '.SqlSettings'`
+SQL_SETTINGS=`echo ${MM_CONFIG} | jq -r '.SqlSettings'`
 DRIVER_NAME=`echo ${SQL_SETTINGS} | jq -r '.DriverName'`
 
 if [ ${DRIVER_NAME} == "postgres" ]
@@ -79,9 +82,9 @@ fi
 echo "   Backing up config.json to $BACKUP_TMP_PATH/config.json"
 cp ${MM_PATH}/config/config.json ${BACKUP_TMP_PATH}/ || { echo >&2 "Aborting."; exit 1; }
 
-echo "   Backing up data folder to $BACKUP_TMP_PATH/data.tar.gz"
+echo "   Backing up ${MM_PATH}/$DATA_DIR to $BACKUP_TMP_PATH/data.tar.gz"
 cd ${MM_PATH}
-tar -czf ${BACKUP_TMP_PATH}/data.tar.gz data || { echo >&2 "Aborting."; exit 1; }
+tar -czf ${BACKUP_TMP_PATH}/data.tar.gz ${DATA_DIR} || { echo >&2 "Aborting."; exit 1; }
 cd ${SWD}
 
 echo "   Copying $NEW_BUILD_NUMBER to $MM_PATH"
