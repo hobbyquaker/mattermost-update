@@ -35,7 +35,8 @@ mmupdate.sh https://releases.mattermost.com/3.10.0/mattermost-3.10.0-linux-amd64
 * More testing
 * Nicer console output (e.g. colored unicode checkmarks)?
 * Fully automated update: another script that checks the Mattermost webpage for updates and calls mmupdate.sh
-
+* Get data folder path from config.json
+* Supply MM_PATH as command line argument and automatically find user/group name
 
 ## Contributing
 
