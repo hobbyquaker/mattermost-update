@@ -13,6 +13,9 @@ wget https://raw.githubusercontent.com/hobbyquaker/mattermost-update/master/mmup
 chmod a+x mmupdate.sh
 ```
 
+In the first few lines of the script you eventually have to change the variables `MM_PATH`, `MM_USER` and `MM_GROUP` 
+(defaults are `/opt/mattermost`, `mattermost` and `mattermost`).
+
 This script utilizes [jq](https://stedolan.github.io/jq/), wget and sudo, so these need to be installed as prerequisite.
 
 ## Usage
