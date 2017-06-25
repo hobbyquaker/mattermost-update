@@ -8,7 +8,7 @@
 # License: MIT
 # Copyright (c) 2017 Sebastian Raff <hq@ccu.io>
 
-VERSION="2.0.1"
+VERSION="2.0.2"
 
 MM_PATH=$1
 TARBALL_URL=$2
@@ -40,7 +40,7 @@ MM_BUILD_NUMBER=`sudo -u ${MM_USER} ${MM_PATH}/bin/platform version | sed -nr 's
 if [ "$NEW_BUILD_NUMBER" == "$MM_BUILD_NUMBER" ]
 then
     echo >&2 "Build $MM_BUILD_NUMBER is already installed. Aborting."
-    exit 1
+    #exit 1
 fi
 
 BACKUP_TMP_PATH=/tmp/mattermost.backup.${MM_BUILD_NUMBER}
@@ -55,6 +55,16 @@ wget -q ${TARBALL_URL} || { echo >&2 "Error: Download failed.  Aborting."; exit 
 echo "   Extracting $TARBALL_FILE"
 tar -xzf ${TARBALL_FILE} || { echo >&2 "Error: Extraction failed.  Aborting."; exit 1; }
 cd ${SWD}
+
+function abort {
+    echo "   Cleaning up tmp folders"
+    rm -r ${NEW_TMP_PATH}
+    rm -r ${BACKUP_TMP_PATH}
+
+    echo "   Starting Mattermost"
+    service mattermost start
+    exit 1
+}
 
 echo "   Stopping Mattermost"
 service mattermost stop || { echo >&2 "Aborting."; exit 1; }
@@ -71,7 +81,7 @@ then
 
     echo "   Dumping $DRIVER_NAME Database $DB_NAME to $DB_DUMP_FILE"
     cd ${MM_PATH}
-    sudo -u ${MM_USER} pg_dump ${DB_NAME} | gzip > ${DB_DUMP_FILE} || { echo >&2 "Error: Database dump failed.  Aborting."; exit 1; }
+    sudo -u ${MM_USER} pg_dump ${DB_NAME} | gzip > ${DB_DUMP_FILE} || { echo >&2 "Error: Database dump failed.  Aborting."; abort; }
 
 else
     # TODO - Implement MySql Backup
@@ -79,10 +89,10 @@ else
     exit 1
 fi
 
-echo "   Backing up config.json to $BACKUP_TMP_PATH/config.json"
+echo "   Backing up config.json to $BACKUP_TMP_PATH/config.json" || { echo >&2 "Error: config.json backup failed.  Aborting."; abort; }
 cp ${MM_PATH}/config/config.json ${BACKUP_TMP_PATH}/
 
-echo "   Backing up ${MM_PATH}/$DATA_DIR to $BACKUP_TMP_PATH/data.tar.gz"
+echo "   Backing up ${MM_PATH}/$DATA_DIR to $BACKUP_TMP_PATH/data.tar.gz"  || { echo >&2 "Error: data backup failed.  Aborting."; abort; }
 cd ${MM_PATH}
 tar -czf ${BACKUP_TMP_PATH}/data.tar.gz ${DATA_DIR}
 cd ${SWD}
