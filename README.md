@@ -33,7 +33,8 @@ mmupdate.sh https://releases.mattermost.com/3.10.0/mattermost-3.10.0-linux-amd64
 
 * Backup of MySQL Database (until now only Postgres is implemented)
 * More testing
-* Nicer Console Output (e.g. colored unicode checkmarks)?
+* Nicer console output (e.g. colored unicode checkmarks)?
+* Fully automated update: another script that checks the Mattermost webpage for updates and calls mmupdate.sh
 
 
 ## Contributing
