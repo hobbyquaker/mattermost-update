@@ -13,6 +13,7 @@ wget https://raw.githubusercontent.com/hobbyquaker/mattermost-update/master/mmup
 chmod a+x mmupdate.sh
 ```
 
+This script utilizes [jq](https://stedolan.github.io/jq/), wget and sudo, so these need to be installed as prerequisite.
 
 ## Usage
 
