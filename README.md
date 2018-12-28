@@ -8,7 +8,7 @@
 
 ```bash
 cd /usr/local/bin
-wget https://raw.githubusercontent.com/hobbyquaker/mattermost-update/master/mmupdate.sh
+wget https://raw.githubusercontent.com/icelander/mattermost-update/master/mmupdate.sh
 chmod a+x mmupdate.sh
 ```
 
