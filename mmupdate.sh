@@ -3,12 +3,12 @@
 # mmupdate.sh
 #
 # Simple script for comfortable update of Mattermost
-# https://github.com/hobbyquaker/mattermost-update
+# https://github.com/icelander/mattermost-update
 #
 # License: MIT
-# Copyright (c) 2017 Sebastian Raff <hq@ccu.io>
+# Copyright (c) 2018 Paul Rothrock <paul@movetoiceland.com>
 
-VERSION="2.0.2"
+VERSION="2.0.3"
 
 MM_PATH=$1
 TARBALL_URL=$2
@@ -76,7 +76,7 @@ DRIVER_NAME=`echo ${SQL_SETTINGS} | jq -r '.DriverName'`
 if [ ${DRIVER_NAME} == "postgres" ]
 then
     DATA_SOURCE=`echo ${SQL_SETTINGS} | jq -r '.DataSource'`
-    DB_NAME=`echo ${DATA_SOURCE} | sed -r 's#.*\/\/([^?]+).*#\1#'`
+    DB_NAME=`echo ${DATA_SOURCE} | sed -r 's#.*\/\/.*\/([^?]+)#\1#'`
     DB_DUMP_FILE=${BACKUP_TMP_PATH}/${DB_NAME}.pgdump.gz
 
     echo "   Dumping $DRIVER_NAME Database $DB_NAME to $DB_DUMP_FILE"

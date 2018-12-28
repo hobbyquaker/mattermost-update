@@ -4,7 +4,6 @@
 
 > Simple script for comfortable update of Mattermost
 
-
 ## Install
 
 ```bash
@@ -19,22 +18,21 @@ This script utilizes [jq](https://stedolan.github.io/jq/), wget and sudo, so the
 
 ## Usage
 
-Copy the URL of the latest Mattermost tarball from http://about.mattermost.com/download/ and call mmupdate.sh with the
-path of you Mattermost installation and the tarball url as parameters.
+Copy the URL of the latest Mattermost tarball from http://about.mattermost.com/download/ and call `mmupdate.sh` with the path of you Mattermost installation and the tarball url as parameters.
 
 Example:
 ```bash
-mmupdate.sh /opt/mattermost https://releases.mattermost.com/3.10.0/mattermost-3.10.0-linux-amd64.tar.gz
+sudo mmupdate.sh /opt/mattermost https://releases.mattermost.com/5.1.0/mattermost-5.1.0-linux-amd64.tar.gz
 ```
 
 
-## Todo
+## To Do
 
 * Backup of MySQL Database (until now only Postgres is implemented)
 * More testing
 * Nicer console output (e.g. colored unicode checkmarks)?
 * Fully automated update: another script that checks the Mattermost webpage for updates and calls mmupdate.sh
-* Omit data dir backup if FileSettings.DriverName != "local"
+* Omit data dir backup if FileSettings.DriverName != "local", or with --no-data flag
 
 ## Contributing
 
@@ -43,8 +41,7 @@ Pull Requests Welcome! :-)
 
 ## License
 
-MIT © [Sebastian Raff](https://github.com/hobbyquaker)
-
+MIT © [Paul Rothrock](https://github.com/icelander)
 
 [mit-badge]: https://img.shields.io/badge/License-MIT-blue.svg?style=flat
 [mit-url]: LICENSE
