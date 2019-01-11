@@ -13,6 +13,23 @@ VERSION="2.0.3"
 MM_PATH=$1
 TARBALL_URL=$2
 
+BACKUP=1
+
+if [[ $3 == '--no-backup' ]]; then
+    BACKUP=0
+fi
+
+if [[ BACKUP ]]; then
+    echo 'Backup will run'
+else
+    read -p "Backup will not happen. Press 'Y' too continue" -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    then
+        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+    fi
+fi
+
 command -v jq >/dev/null 2>&1 || { echo >&2 "This script requires jq but it's not installed.  Aborting."; exit 1; }
 command -v wget >/dev/null 2>&1 || { echo >&2 "This script requires wget but it's not installed.  Aborting."; exit 1; }
 command -v sudo >/dev/null 2>&1 || { echo >&2 "This script requires sudo but it's not installed.  Aborting."; exit 1; }
