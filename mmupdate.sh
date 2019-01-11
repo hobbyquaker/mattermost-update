@@ -15,11 +15,11 @@ TARBALL_URL=$2
 
 BACKUP=1
 
-if [[ $3 == '--no-backup' ]]; then
+if [[ "$3" == "--no-backup" ]]; then
     BACKUP=0
 fi
 
-if [[ BACKUP ]]; then
+if [[ BACKUP == 1 ]]; then
     echo 'Backup will run'
 else
     read -p "Backup will not happen. Press 'Y' too continue" -n 1 -r
